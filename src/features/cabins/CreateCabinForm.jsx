@@ -10,8 +10,9 @@ import { useForm } from "react-hook-form";
 import { createCabin } from "../../services/apiCabins";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import FormRow from "../../ui/FormRow";
 
-const FormRow = styled.div`
+const FormRow2 = styled.div`
   display: grid;
   align-items: center;
   grid-template-columns: 24rem 1fr 1.2fr;
@@ -70,34 +71,38 @@ function CreateCabinForm() {
     },
   });
 
-  const { register, handleSubmit, getValues } = useForm();
+  const { register, handleSubmit, getValues, formState } = useForm();
+
+  const { errors } = formState;
+  console.log(errors);
 
   function onSubmit(data) {
     mutate(data);
   }
 
   function onError(errors) {
-    console.log(errors);
+    // console.log(errors);
   }
 
   return (
+    /* HandleSubmit etdikde bu her bir forumu yoxlayir. Eger required
+      verilenlerden hansisa doldurulmayibsa 2ci arqumenti goturur. Burada 2ci arqument onError-dur*/
     <Form onSubmit={handleSubmit(onSubmit, onError)}>
-      <FormRow>
-        <Label htmlFor="name">Cabin name</Label>
+      <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
           id="name"
+          disabled={isCreating}
           {...register("name", {
             required: "This field is required",
           })}
         />
       </FormRow>
-
-      <FormRow>
-        <Label htmlFor="maxCapacity">Maximum capacity</Label>
+      <FormRow label="Maximum capacity" error={errors?.maxCapacity?.message}>
         <Input
           type="number"
           id="maxCapacity"
+          disabled={isCreating}
           {...register("maxCapacity", {
             required: "This field is required",
             min: {
@@ -107,53 +112,49 @@ function CreateCabinForm() {
           })}
         />
       </FormRow>
-
-      <FormRow>
-        <Label htmlFor="regularPrice">Regular price</Label>
+      <FormRow label="Regular price" error={errors?.regularPrice?.message}>
         <Input
           type="number"
           id="regularPrice"
+          disabled={isCreating}
           {...register("regularPrice", {
             required: "This field is required",
             min: {
               value: 1,
-              message: "Price should be at least 1",
+              message: "Regular price must be at least 1",
             },
           })}
         />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="discount">Discount</Label>
+      <FormRow label="Discount" error={errors?.discount?.message}>
         <Input
           type="number"
           id="discount"
+          disabled={isCreating}
           defaultValue={0}
           {...register("discount", {
             required: "This field is required",
             validate: (value) =>
-              value > 100 || "Discount should be less than regular price",
+              +value <= Number(getValues().regularPrice) ||
+              "Discount should be less than regular price",
           })}
         />
       </FormRow>
-
-      <FormRow>
-        <Label htmlFor="description">Description for website</Label>
-        <Textarea
-          type="number"
+      <FormRow label="Description" error={errors?.description?.message}>
+        <Input
+          type="text"
           id="description"
-          defaultValue=""
+          disabled={isCreating}
           {...register("description", {
             required: "This field is required",
           })}
         />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="image">Cabin photo</Label>
+      <FormRow label="Cabin's photo">
         <FileInput id="image" accept="image/*" />
       </FormRow>
-
       <FormRow>
         {/* type is an HTML attribute! */}
         <Button variation="secondary" type="reset">
@@ -166,3 +167,5 @@ function CreateCabinForm() {
 }
 
 export default CreateCabinForm;
+
+//
