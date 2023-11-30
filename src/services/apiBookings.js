@@ -1,10 +1,39 @@
+/* eslint-disable no-unused-vars */
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
+
+export async function getBookings({ filter, sortBy }) {
+  /* .gte method is ---> Greather Than or Equal */
+  /* .lte method is ---> Lower Than or Equal */
+  let query = supabase
+    .from("bookings")
+    .select(
+      "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, cabins(name), guests(fullName, email)"
+    );
+
+  // FILTER
+  if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
+
+  const { data, error } = await query;
+
+  // SORT
+  if (sortBy)
+    query = query.order(sortBy.field, {
+      ascending: sortBy.direction === "asc",
+    });
+
+  if (error) {
+    console.error(error);
+    throw new Error("Bookings cannot loaded for some reasons");
+  }
+
+  return data;
+}
 
 export async function getBooking(id) {
   const { data, error } = await supabase
     .from("bookings")
-    .select("*, cabins(*), guests(*)")
+    .select("*")
     .eq("id", id)
     .single();
 

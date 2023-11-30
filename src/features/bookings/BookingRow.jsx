@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
 
@@ -44,7 +46,7 @@ function BookingRow({
     numGuests,
     totalPrice,
     status,
-    guests: { fullName: guestName, email },
+    guests,
     cabins: { name: cabinName },
   },
 }) {
@@ -54,13 +56,16 @@ function BookingRow({
     "checked-out": "silver",
   };
 
+  // const { fullName: guestName, email } = guests;
+  // const { name: cabinName } = cabins;
+
   return (
     <Table.Row>
       <Cabin>{cabinName}</Cabin>
 
       <Stacked>
-        <span>{guestName}</span>
-        <span>{email}</span>
+        {/* <span>{guestName}</span> */}
+        {/* <span>{email}</span> */}
       </Stacked>
 
       <Stacked>

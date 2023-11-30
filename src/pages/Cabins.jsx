@@ -6,6 +6,8 @@ import Row from "../ui/Row";
 // import AddCabins from "../features/cabins/AddCabin";
 import CabinTable from "../features/cabins/CabinTable";
 import AddCabins from "../features/cabins/AddCabin";
+import CabinTableOperations from "../features/cabins/CabinTableOperations";
+// import { useParams } from "react-router-dom";
 
 function Cabins() {
   // const [showForm, setShowForm] = useState(false);
@@ -14,7 +16,7 @@ function Cabins() {
     <>
       <Row type="horizontal">
         <Heading as="h1">All cabins</Heading>
-        <p>Filter / Sort</p>
+        <CabinTableOperations />
       </Row>
 
       <Row>
