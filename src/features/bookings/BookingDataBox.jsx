@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable react/prop-types */
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
 import {
@@ -8,7 +10,7 @@ import {
 } from "react-icons/hi2";
 
 import DataItem from "../../ui/DataItem";
-import { Flag } from "../../ui/Flag";
+// import { Flag } from "../../ui/Flag";
 
 import { formatDistanceFromNow, formatCurrency } from "../../utils/helpers";
 
@@ -108,14 +110,14 @@ function BookingDataBox({ booking }) {
     startDate,
     endDate,
     numNights,
-    numGuests,
+    // numGuests,
     cabinPrice,
     extrasPrice,
     totalPrice,
     hasBreakfast,
     observations,
     isPaid,
-    guests: { fullName: guestName, email, country, countryFlag, nationalID },
+    // guests: { fullName: guestName, email, country, countryFlag, nationalID },
     cabins: { name: cabinName },
   } = booking;
 
@@ -140,12 +142,13 @@ function BookingDataBox({ booking }) {
 
       <Section>
         <Guest>
-          {countryFlag && <Flag src={countryFlag} alt={`Flag of ${country}`} />}
+          {/* {countryFlag && <Flag src={countryFlag} alt={`Flag of ${country}`} />} */}
           <p>
-            {guestName} {numGuests > 1 ? `+ ${numGuests - 1} guests` : ""}
+            {/* {guestName}  */}
+            {/* {numGuests > 1 ? `+ ${numGuests - 1} guests` : ""} */}
           </p>
           <span>&bull;</span>
-          <p>{email}</p>
+          {/* <p>{email}</p> */}
           <span>&bull;</span>
           <p>National ID {nationalID}</p>
         </Guest>

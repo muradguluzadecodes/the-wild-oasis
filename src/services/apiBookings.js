@@ -1,20 +1,20 @@
 /* eslint-disable no-unused-vars */
+import { PAGE_SIZE } from "../utils/constants";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
-export async function getBookings({ filter, sortBy }) {
+export async function getBookings({ filter, sortBy, page }) {
   /* .gte method is ---> Greather Than or Equal */
   /* .lte method is ---> Lower Than or Equal */
   let query = supabase
     .from("bookings")
     .select(
-      "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, cabins(name), guests(fullName, email)"
+      "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, cabins(name), guests(fullName, email)",
+      { count: "exact" }
     );
 
   // FILTER
   if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
-
-  const { data, error } = await query;
 
   // SORT
   if (sortBy)
@@ -22,18 +22,25 @@ export async function getBookings({ filter, sortBy }) {
       ascending: sortBy.direction === "asc",
     });
 
+  if (page) {
+    const from = (page - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+    query = query.range(from, to);
+  }
+  const { data, error, count } = await query;
+
   if (error) {
     console.error(error);
     throw new Error("Bookings cannot loaded for some reasons");
   }
 
-  return data;
+  return { data, count };
 }
 
 export async function getBooking(id) {
   const { data, error } = await supabase
     .from("bookings")
-    .select("*")
+    .select("*, cabins(*), guests(*)")
     .eq("id", id)
     .single();
 
