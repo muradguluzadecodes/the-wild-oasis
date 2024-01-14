@@ -3,7 +3,7 @@ import Filter from "../../ui/Filter";
 function DashboardFilter() {
   return (
     <Filter
-      filterField="last"
+      filteredField="last"
       options={[
         { value: "7", title: "Last 7 days" },
         { value: "30", title: "Last 30 days" },
