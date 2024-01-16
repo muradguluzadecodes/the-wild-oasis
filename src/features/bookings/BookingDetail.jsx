@@ -20,6 +20,7 @@ import Modal from "../../ui/Modal";
 import { deleteBooking } from "../../services/apiBookings";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import { useDeleteBooking } from "./useDeleteBooking";
+import Empty from "../../ui/Empty";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -37,6 +38,7 @@ function BookingDetail() {
 
   const moveBack = useMoveBack();
   if (isLoading) return <Spinner />;
+  if (!booking) return <Empty resourceName="booking" />;
   const { status, id: bookingId } = booking;
 
   const statusToTagName = {
